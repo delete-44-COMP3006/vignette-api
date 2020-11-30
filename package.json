@@ -1,0 +1,12 @@
+{
+  "name": "vignette",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": "https://github.com/delete-44-COMP3006/vignette-api.git",
+  "author": "delete-44",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.10.18"
+  }
+}
