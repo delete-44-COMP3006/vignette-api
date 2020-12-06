@@ -23,6 +23,7 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.get("/submissions", routes.submissionsIndex);
+app.get("/submissions/:id", routes.submissionsShow);
 
 // Start the server on the specified port and print a helpful
 // message to the console log to state that the server is running.
