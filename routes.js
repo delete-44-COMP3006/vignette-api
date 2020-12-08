@@ -1,4 +1,5 @@
 let db = require("./db/submissions");
+let Submission = require("./models/submission");
 
 async function submissionsIndex(request, response) {
   let submissions = await db.getSubmissions();
@@ -12,5 +13,16 @@ async function submissionsShow(request, response) {
   response.json(submission);
 }
 
+async function submissionsCreate(request, response) {
+  const submission = new Submission({
+    title: request.body.title,
+    content: request.body.title,
+  });
+
+  await submission.save();
+  response.send(submission);
+}
+
 module.exports.submissionsIndex = submissionsIndex;
 module.exports.submissionsShow = submissionsShow;
+module.exports.submissionsCreate = submissionsCreate;

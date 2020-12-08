@@ -1,11 +1,11 @@
-let models = require("../models/submission");
+let Submission = require("../models/submission");
 
 async function getSubmissions() {
-  return await models.Submission.find();
+  return await Submission.find();
 }
 
 async function getSubmission(id) {
-  return await models.Submission.find({_id: id})
+  return await Submission.find({_id: id})
 }
 
 module.exports.getSubmissions = getSubmissions;

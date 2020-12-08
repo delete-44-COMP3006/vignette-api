@@ -2,13 +2,15 @@
 // determine which port to use.
 let express = require("express");
 let mongoose = require("mongoose");
-let routes = require("./routes")
-var cors = require('cors')
+let routes = require("./routes");
+var cors = require("cors");
+var bodyParser = require("body-parser");
 let app = express();
 let port = 9000;
 
 // Enable CORs for all routes
-app.use(cors())
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }))
 
 let url = "mongodb+srv://admin:7%24zjpJei6VX!L2K%24sApuMeZfCHxB*he1*KBYuEJ%24bDCZ8b%40Yenm@vignettecluster.o4pwf.mongodb.net/vignette-db";
 mongoose.connect(url, {
@@ -24,6 +26,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.get("/submissions", routes.submissionsIndex);
 app.get("/submissions/:id", routes.submissionsShow);
+app.post("/submissions", routes.submissionsCreate);
 
 // Start the server on the specified port and print a helpful
 // message to the console log to state that the server is running.
