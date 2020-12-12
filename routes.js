@@ -14,12 +14,8 @@ async function submissionsShow(request, response) {
 }
 
 async function submissionsCreate(request, response) {
-  const submission = new Submission({
-    title: request.body.title,
-    content: request.body.title,
-  });
+  let submission = await db.createSubmission(request.body)
 
-  await submission.save();
   response.send(submission);
 }
 
