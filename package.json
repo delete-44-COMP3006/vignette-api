@@ -5,6 +5,9 @@
   "repository": "https://github.com/delete-44-COMP3006/vignette-api.git",
   "author": "delete-44",
   "license": "MIT",
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",

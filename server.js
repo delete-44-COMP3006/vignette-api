@@ -5,7 +5,7 @@ let mongoose = require("mongoose");
 let routes = require("./routes")
 var cors = require('cors')
 let app = express();
-let port = 9000;
+let port = process.env.PORT || 9000;
 
 // Enable CORs for all routes
 app.use(cors())
