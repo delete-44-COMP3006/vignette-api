@@ -11,7 +11,7 @@ async function getSubmission(id) {
 async function createSubmission(data) {
   const submission = new Submission({
     title: data.title,
-    content: data.title,
+    content: data.content,
   });
 
   await submission.save();
