@@ -1,11 +1,11 @@
-let Submission = require("../models/submission");
+const Submission = require("../models/submission");
 
 async function getSubmissions() {
   return await Submission.find();
 }
 
 async function getSubmission(id) {
-  return await Submission.find({ _id: id });
+  return await Submission.findOne({ _id: id });
 }
 
 async function createSubmission(data) {
