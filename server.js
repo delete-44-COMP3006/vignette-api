@@ -10,7 +10,8 @@ let port = process.env.PORT || 9000;
 // Enable CORs for all routes
 app.use(cors())
 
-let url = "mongodb+srv://admin:7%24zjpJei6VX!L2K%24sApuMeZfCHxB*he1*KBYuEJ%24bDCZ8b%40Yenm@vignettecluster.o4pwf.mongodb.net/vignette-db";
+let url = process.env.DB_URL;
+
 mongoose.connect(url, {
   useUnifiedTopology: true,
   useNewUrlParser: true

@@ -6,7 +6,8 @@
   "author": "delete-44",
   "license": "MIT",
   "scripts": {
-    "start": "node server.js"
+    "start": "env DB_URL='mongodb+srv://admin:7%24zjpJei6VX!L2K%24sApuMeZfCHxB*he1*KBYuEJ%24bDCZ8b%40Yenm@vignettecluster.o4pwf.mongodb.net/vignette-db' node server.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install npm && run build"
   },
   "dependencies": {
     "cors": "^2.8.5",
