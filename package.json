@@ -7,10 +7,12 @@
   "license": "MIT",
   "scripts": {
     "start": "env DB_URL='mongodb+srv://admin:7%24zjpJei6VX!L2K%24sApuMeZfCHxB*he1*KBYuEJ%24bDCZ8b%40Yenm@vignettecluster.o4pwf.mongodb.net/vignette-db' node server.js",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install npm && run build"
+    "test": "env DB_URL='mongodb+srv://admin:7%24zjpJei6VX!L2K%24sApuMeZfCHxB*he1*KBYuEJ%24bDCZ8b%40Yenm@vignettecluster.o4pwf.mongodb.net/vignette-test' mocha tests"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "mongoose": "^5.10.18"
