@@ -1,20 +1,19 @@
-let db = require("./db/submissions");
-let Submission = require("./models/submission");
+const db = require("./db/submissions");
 
 async function submissionsIndex(request, response) {
-  let submissions = await db.getSubmissions();
+  const submissions = await db.getSubmissions();
 
   response.json(submissions);
 }
 
 async function submissionsShow(request, response) {
-  let submission = await db.getSubmission(request.params.id);
+  const submission = await db.getSubmission(request.params.id);
 
   response.json(submission);
 }
 
 async function submissionsCreate(request, response) {
-  let submission = await db.createSubmission(request.body)
+  const submission = await db.createSubmission(request.body);
 
   response.send(submission);
 }

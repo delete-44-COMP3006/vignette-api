@@ -1,9 +1,9 @@
-var mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-var submissionSchema = new mongoose.Schema({
+const submissionSchema = new mongoose.Schema({
   title: String,
   content: String,
 });
 
-let Submission = mongoose.model("submission", submissionSchema);
+const Submission = mongoose.model("submission", submissionSchema);
 module.exports = Submission;

@@ -1,4 +1,4 @@
-let Submission = require("../models/submission");
+const Submission = require("../models/submission");
 
 async function getSubmissions() {
   return await Submission.find();
