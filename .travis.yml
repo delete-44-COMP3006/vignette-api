@@ -2,6 +2,9 @@ language: node_js
 node_js:
 - node
 
+services:
+- mongodb
+
 install:
 - yarn global add mocha
 - yarn add chai
