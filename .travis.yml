@@ -3,7 +3,7 @@ node_js:
 - node
 
 install:
-- npm install -g mocha
-- npm install chai
-- npm install chai-http
-- npm install express
+- yarn global add mocha
+- yarn add chai
+- yarn add chai-http
+- yarn add express
