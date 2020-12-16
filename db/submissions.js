@@ -5,7 +5,7 @@ async function getSubmissions() {
 }
 
 async function getSubmission(id) {
-  return await Submission.find({ _id: id });
+  return await Submission.findOne({ _id: id });
 }
 
 async function createSubmission(data) {

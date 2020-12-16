@@ -78,20 +78,17 @@ describe("Test server", function () {
         .get(`${path}/${submission_1._id}`);
 
       chai.assert.equal(response.status, 200);
-      chai.assert.equal(response.body.length, 1);
 
       // Confirm only desired submission is retrieved
-      chai.assert.include(response.text, "Test title 1");
-      chai.assert.include(response.text, "Test content 1");
+      chai.assert.equal(response.body.title, "Test title 1");
+      chai.assert.equal(response.body.content, "Test content 1");
       chai.assert.notInclude(response.text, "Test title 2");
       chai.assert.notInclude(response.text, "Test content 2");
     });
 
     it("returns valid status when given an invalid ID", async () => {
       // Perform GET request with a set ID
-      const response = await chai
-        .request(this.app)
-        .get(`${path}/invalid_id`);
+      const response = await chai.request(this.app).get(`${path}/507f191e810c19729de860ea`);
 
       chai.assert.equal(response.status, 404);
     });

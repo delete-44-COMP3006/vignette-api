@@ -9,7 +9,7 @@ async function submissionsIndex(request, response) {
 async function submissionsShow(request, response) {
   const submission = await db.getSubmission(request.params.id);
 
-  response.json(submission);
+  response.status(submission ? 200 : 404).json(submission);
 }
 
 async function submissionsCreate(request, response) {
