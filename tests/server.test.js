@@ -6,7 +6,7 @@ const Submission = require("../models/submission");
 
 chai.use(chaiHttp);
 
-describe("Test server", function () {
+describe("Server", function () {
   let submission_1, submission_2;
   const path = "/submissions";
 
