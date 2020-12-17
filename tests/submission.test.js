@@ -42,7 +42,6 @@ describe("Submission model", function () {
         title: "T".repeat(101),
         content: "Content",
       });
-      console.log(submission.title.length)
 
       const error = submission.validateSync();
 

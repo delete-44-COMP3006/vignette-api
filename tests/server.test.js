@@ -47,28 +47,38 @@ describe("Server", function () {
     chai.assert.include(response.text, "Test content 2");
   });
 
-  it("successfully POSTs a new submission", async () => {
-    // Add new record
-    const response = await chai.request(this.app).post(path).type("form").send({
-      title: "Test title 3",
-      content: "Test content 3",
+  describe("Testing POST create", () => {
+    it("successfully creates when params are valid", async () => {
+      // Add new record
+      const response = await chai.request(this.app).post(path).type("form").send({
+        title: "Test title 3",
+        content: "Test content 3",
+      });
+
+      // Confirm record is returned correctly
+      chai.assert.equal(response.status, 201);
+      chai.assert.equal(response.body.title, "Test title 3");
+      chai.assert.equal(response.body.content, "Test content 3");
+
+      // Confirm new record has been added
+      const indexResponse = await chai.request(this.app).get(path);
+
+      chai.assert.include(indexResponse.text, "Test title 1");
+      chai.assert.include(indexResponse.text, "Test content 1");
+      chai.assert.include(indexResponse.text, "Test title 2");
+      chai.assert.include(indexResponse.text, "Test content 2");
+      chai.assert.include(indexResponse.text, "Test title 3");
+      chai.assert.include(indexResponse.text, "Test content 3");
     });
 
-    // Confirm record is returned correctly
-    chai.assert.equal(response.status, 201);
-    chai.assert.equal(response.body.title, "Test title 3");
-    chai.assert.equal(response.body.content, "Test content 3");
+    it("returns an error when params are incorrect", async () => {
+      // Add invalid record
+      const response = await chai.request(this.app).post(path).type("form").send({
+      });
 
-    // Confirm new record has been added
-    const indexResponse = await chai.request(this.app).get(path);
-
-    chai.assert.include(indexResponse.text, "Test title 1");
-    chai.assert.include(indexResponse.text, "Test content 1");
-    chai.assert.include(indexResponse.text, "Test title 2");
-    chai.assert.include(indexResponse.text, "Test content 2");
-    chai.assert.include(indexResponse.text, "Test title 3");
-    chai.assert.include(indexResponse.text, "Test content 3");
-  });
+      // Confirm error is returned correctly
+    });
+  })
 
   describe("Testing GET show", () => {
     it("successfully GETs a single submission by ID", async () => {
