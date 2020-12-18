@@ -14,9 +14,29 @@ async function createSubmission(data) {
     content: data.content,
   });
 
-  await submission.save();
-  return submission;
+  let response = submission;
+
+  await submission.save((error) => {
+    response = formatErrors(error);
+  });
+
+  return response;
 }
+
+const formatErrors = (error) => {
+  const fields = ["title", "content"];
+  let errorArray = [];
+
+  if (error) {
+    fields.forEach((field) => {
+      if (error.errors[field]) {
+        errorArray.push(error.errors[field].message);
+      }
+    });
+  }
+
+  return errorArray;
+};
 
 module.exports.getSubmissions = getSubmissions;
 module.exports.getSubmission = getSubmission;
