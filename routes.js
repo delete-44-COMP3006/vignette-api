@@ -15,7 +15,7 @@ async function submissionsShow(request, response) {
 async function submissionsCreate(request, response) {
   const submission = await db.createSubmission(request.body);
 
-  response.status(201).send(submission);
+  response.status(Array.isArray(submission) ? 422 : 201).send(submission);
 }
 
 module.exports.submissionsIndex = submissionsIndex;

@@ -14,21 +14,29 @@ async function createSubmission(data) {
     content: data.content,
   });
 
-  // TODO: Figure out how to return errors
   let response = submission;
 
-  await submission.save(function(err) {
-    if (err !== null) {
-      response = []
-      err.errors.forEach(e => {
-        response.push(e.message)
-      });
-      console.log(response)
-    }
-  })
+  await submission.save((error) => {
+    response = formatErrors(error);
+  });
 
   return response;
 }
+
+const formatErrors = (error) => {
+  const fields = ["title", "content"];
+  let errorArray = [];
+
+  if (error) {
+    fields.forEach((field) => {
+      if (error.errors[field]) {
+        errorArray.push(error.errors[field].message);
+      }
+    });
+  }
+
+  return errorArray;
+};
 
 module.exports.getSubmissions = getSubmissions;
 module.exports.getSubmission = getSubmission;
