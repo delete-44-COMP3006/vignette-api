@@ -11,6 +11,7 @@ describe("Submission model", function () {
   it("Is correctly saved when attributes are correct", async () => {
     const submission = new Submission({
       title: "Title",
+      summary: "Summary",
       content: "Content",
     });
 
@@ -20,6 +21,7 @@ describe("Submission model", function () {
 
     chai.assert.equal(submission.title, "Title");
     chai.assert.equal(submission.content, "Content");
+    chai.assert.equal(submission.summary, "Summary");
     chai.assert.isNotNull(submission._id);
   });
 
@@ -52,6 +54,34 @@ describe("Submission model", function () {
     });
   });
 
+  describe("Summary", () => {
+    it("is valid when missing", async () => {
+      const submission = new Submission({
+        title: "Title",
+        content: "Content",
+      });
+
+      const error = submission.validateSync();
+
+      chai.assert.isUndefined(error);
+    });
+
+    it("is invalid when too long", async () => {
+      const submission = new Submission({
+        title: "Title",
+        summary: "S".repeat(301),
+        content: "Content",
+      });
+
+      const error = submission.validateSync();
+
+      chai.assert.equal(
+        error.errors.summary.message,
+        "Summary must be under 300 characters in length"
+      );
+    });
+  });
+
   describe("Content", () => {
     it("is invalid when missing", async () => {
       const submission = new Submission({
@@ -80,4 +110,18 @@ describe("Submission model", function () {
       );
     });
   });
+
+  describe("Score", () => {
+    it("is given a default value when not provided", async () => {
+      const submission = new Submission({
+        title: "Title",
+        content: "Content",
+      });
+
+      const error = submission.validateSync();
+
+      chai.assert.isUndefined(error);
+      chai.assert.equal(submission.score, 0);
+    })
+  })
 });

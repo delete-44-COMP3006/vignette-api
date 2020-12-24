@@ -8,7 +8,7 @@ const submissionSchema = new mongoose.Schema({
   },
   summary: {
     type: String,
-    maxlength: [250, "Summary must be under 300 characters in length"],
+    maxlength: [300, "Summary must be under 300 characters in length"],
   },
   content: {
     type: String,
