@@ -21,6 +21,7 @@ describe("Server", function () {
 
     submission_2 = new Submission({
       title: "Test title 2",
+      summary: "Test summary 2",
       content: "Test content 2",
     });
 
@@ -44,6 +45,7 @@ describe("Server", function () {
     chai.assert.include(response.text, "Test title 1");
     chai.assert.include(response.text, "Test content 1");
     chai.assert.include(response.text, "Test title 2");
+    chai.assert.include(response.text, "Test summary 2");
     chai.assert.include(response.text, "Test content 2");
   });
 
@@ -58,12 +60,14 @@ describe("Server", function () {
         .type("form")
         .send({
           title: "Test title 3",
+          summary: "Test summary 3",
           content: "Test content 3",
         });
 
       // Confirm record is returned correctly
       chai.assert.equal(response.status, 201);
       chai.assert.equal(response.body.title, "Test title 3");
+      chai.assert.equal(response.body.summary, "Test summary 3");
       chai.assert.equal(response.body.content, "Test content 3");
 
       // Confirm new record is added correctly
@@ -75,8 +79,10 @@ describe("Server", function () {
       chai.assert.include(indexResponse.text, "Test title 1");
       chai.assert.include(indexResponse.text, "Test content 1");
       chai.assert.include(indexResponse.text, "Test title 2");
+      chai.assert.include(indexResponse.text, "Test summary 2");
       chai.assert.include(indexResponse.text, "Test content 2");
       chai.assert.include(indexResponse.text, "Test title 3");
+      chai.assert.include(indexResponse.text, "Test summary 3");
       chai.assert.include(indexResponse.text, "Test content 3");
     });
 
@@ -140,6 +146,7 @@ describe("Server", function () {
       chai.assert.equal(response.body.title, "Test title 1");
       chai.assert.equal(response.body.content, "Test content 1");
       chai.assert.notInclude(response.text, "Test title 2");
+      chai.assert.notInclude(response.text, "Test summary 2");
       chai.assert.notInclude(response.text, "Test content 2");
     });
 
