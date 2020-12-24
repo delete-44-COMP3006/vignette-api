@@ -1,12 +1,12 @@
 language: node_js
 node_js:
-- node
+  - node
 
 services:
-- mongodb
+  - mongodb
 
 install:
-- yarn global add mocha
-- yarn add chai
-- yarn add chai-http
-- yarn add express
+  - yarn global add mocha
+  - yarn add chai
+  - yarn add chai-http
+  - yarn add express

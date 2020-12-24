@@ -21,6 +21,7 @@ describe("Server", function () {
 
     submission_2 = new Submission({
       title: "Test title 2",
+      summary: "Test summary 2",
       content: "Test content 2",
     });
 
@@ -44,6 +45,7 @@ describe("Server", function () {
     chai.assert.include(response.text, "Test title 1");
     chai.assert.include(response.text, "Test content 1");
     chai.assert.include(response.text, "Test title 2");
+    chai.assert.include(response.text, "Test summary 2");
     chai.assert.include(response.text, "Test content 2");
   });
 
@@ -58,16 +60,18 @@ describe("Server", function () {
         .type("form")
         .send({
           title: "Test title 3",
+          summary: "Test summary 3",
           content: "Test content 3",
         });
 
       // Confirm record is returned correctly
       chai.assert.equal(response.status, 201);
       chai.assert.equal(response.body.title, "Test title 3");
+      chai.assert.equal(response.body.summary, "Test summary 3");
       chai.assert.equal(response.body.content, "Test content 3");
 
       // Confirm new record is added correctly
-      chai.assert.equal(initialCount + 1, (await Submission.find()).length)
+      chai.assert.equal(initialCount + 1, (await Submission.find()).length);
 
       // Confirm new record has been added
       const indexResponse = await chai.request(this.app).get(path);
@@ -75,8 +79,10 @@ describe("Server", function () {
       chai.assert.include(indexResponse.text, "Test title 1");
       chai.assert.include(indexResponse.text, "Test content 1");
       chai.assert.include(indexResponse.text, "Test title 2");
+      chai.assert.include(indexResponse.text, "Test summary 2");
       chai.assert.include(indexResponse.text, "Test content 2");
       chai.assert.include(indexResponse.text, "Test title 3");
+      chai.assert.include(indexResponse.text, "Test summary 3");
       chai.assert.include(indexResponse.text, "Test content 3");
     });
 
@@ -101,7 +107,7 @@ describe("Server", function () {
       );
 
       // Confirm no new records are added
-      chai.assert.equal(initialCount, (await Submission.find()).length)
+      chai.assert.equal(initialCount, (await Submission.find()).length);
     });
 
     it("returns multiple errors when multiple params are incorrect", async () => {
@@ -112,18 +118,45 @@ describe("Server", function () {
         .request(this.app)
         .post(path)
         .type("form")
-        .send({});
+        .send({ summary: "S".repeat(301) });
 
       // Confirm array of errors is returned correctly
       chai.assert.equal(response.status, 422);
-      chai.assert.equal(response.body.length, 2);
+      chai.assert.equal(response.body.length, 3);
       chai.assert.includeDeepMembers(response.body, [
         "Please name your submission",
         "Please add some content to your submission",
+        "Summary must be under 300 characters in length",
       ]);
 
       // Confirm no new records are added
-      chai.assert.equal(initialCount, (await Submission.find()).length)
+      chai.assert.equal(initialCount, (await Submission.find()).length);
+    });
+
+    it("ignores invalid params", async () => {
+      const initialCount = (await Submission.find()).length;
+
+      // Add new record
+      const response = await chai
+        .request(this.app)
+        .post(path)
+        .type("form")
+        .send({
+          title: "Test title 3",
+          summary: "Test summary 3",
+          content: "Test content 3",
+          invalidParam: "Unpermitted!",
+        });
+
+      // Confirm record is returned correctly
+      chai.assert.equal(response.status, 201);
+      chai.assert.equal(response.body.title, "Test title 3");
+      chai.assert.equal(response.body.summary, "Test summary 3");
+      chai.assert.equal(response.body.content, "Test content 3");
+      chai.assert.notInclude(response.text, "Unpermitted!");
+
+      // Confirm new record is added correctly
+      chai.assert.equal(initialCount + 1, (await Submission.find()).length);
     });
   });
 
@@ -140,6 +173,7 @@ describe("Server", function () {
       chai.assert.equal(response.body.title, "Test title 1");
       chai.assert.equal(response.body.content, "Test content 1");
       chai.assert.notInclude(response.text, "Test title 2");
+      chai.assert.notInclude(response.text, "Test summary 2");
       chai.assert.notInclude(response.text, "Test content 2");
     });
 

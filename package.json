@@ -6,7 +6,7 @@
   "author": "delete-44",
   "license": "MIT",
   "scripts": {
-    "start": "env DB_URL='mongodb+srv://staging:secret123@vignettecluster.o4pwf.mongodb.net/vignette-staging' node server.js",
+    "start": "env DB_URL='mongodb+srv://staging:secret123@vignettecluster.o4pwf.mongodb.net/vignette-staging?retryWrites=true&w=majority' node server.js",
     "test": "env DB_URL='mongodb+srv://test:secret123@vignettecluster.o4pwf.mongodb.net/vignette-test' mocha --exit tests"
   },
   "dependencies": {
