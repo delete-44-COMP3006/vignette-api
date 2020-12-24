@@ -9,10 +9,7 @@ async function getSubmission(id) {
 }
 
 async function createSubmission(data) {
-  const submission = new Submission({
-    title: data.title,
-    content: data.content,
-  });
+  const submission = new Submission(data);
 
   let response = submission;
 
