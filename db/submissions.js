@@ -1,4 +1,5 @@
 const Submission = require("../models/submission");
+const permittedParams = ["title", "summary", "content"];
 
 async function getSubmissions() {
   return await Submission.find();
@@ -21,11 +22,10 @@ async function createSubmission(data) {
 }
 
 const formatErrors = (error) => {
-  const fields = ["title", "content"];
   let errorArray = [];
 
   if (error) {
-    fields.forEach((field) => {
+    permittedParams.forEach((field) => {
       if (error.errors[field]) {
         errorArray.push(error.errors[field].message);
       }

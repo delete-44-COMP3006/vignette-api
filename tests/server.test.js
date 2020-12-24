@@ -118,14 +118,15 @@ describe("Server", function () {
         .request(this.app)
         .post(path)
         .type("form")
-        .send({});
+        .send({ summary: "S".repeat(301) });
 
       // Confirm array of errors is returned correctly
       chai.assert.equal(response.status, 422);
-      chai.assert.equal(response.body.length, 2);
+      chai.assert.equal(response.body.length, 3);
       chai.assert.includeDeepMembers(response.body, [
         "Please name your submission",
         "Please add some content to your submission",
+        "Summary must be under 300 characters in length",
       ]);
 
       // Confirm no new records are added
