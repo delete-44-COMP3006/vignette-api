@@ -71,7 +71,7 @@ describe("Server", function () {
       chai.assert.equal(response.body.content, "Test content 3");
 
       // Confirm new record is added correctly
-      chai.assert.equal(initialCount + 1, (await Submission.find()).length)
+      chai.assert.equal(initialCount + 1, (await Submission.find()).length);
 
       // Confirm new record has been added
       const indexResponse = await chai.request(this.app).get(path);
@@ -107,7 +107,7 @@ describe("Server", function () {
       );
 
       // Confirm no new records are added
-      chai.assert.equal(initialCount, (await Submission.find()).length)
+      chai.assert.equal(initialCount, (await Submission.find()).length);
     });
 
     it("returns multiple errors when multiple params are incorrect", async () => {
@@ -129,7 +129,33 @@ describe("Server", function () {
       ]);
 
       // Confirm no new records are added
-      chai.assert.equal(initialCount, (await Submission.find()).length)
+      chai.assert.equal(initialCount, (await Submission.find()).length);
+    });
+
+    it("ignores invalid params", async () => {
+      const initialCount = (await Submission.find()).length;
+
+      // Add new record
+      const response = await chai
+        .request(this.app)
+        .post(path)
+        .type("form")
+        .send({
+          title: "Test title 3",
+          summary: "Test summary 3",
+          content: "Test content 3",
+          invalidParam: "Unpermitted!",
+        });
+
+      // Confirm record is returned correctly
+      chai.assert.equal(response.status, 201);
+      chai.assert.equal(response.body.title, "Test title 3");
+      chai.assert.equal(response.body.summary, "Test summary 3");
+      chai.assert.equal(response.body.content, "Test content 3");
+      chai.assert.notInclude(response.text, "Unpermitted!");
+
+      // Confirm new record is added correctly
+      chai.assert.equal(initialCount + 1, (await Submission.find()).length);
     });
   });
 

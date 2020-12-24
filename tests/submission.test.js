@@ -122,6 +122,6 @@ describe("Submission model", function () {
 
       chai.assert.isUndefined(error);
       chai.assert.equal(submission.score, 0);
-    })
-  })
+    });
+  });
 });
