@@ -6,8 +6,8 @@
   "author": "delete-44",
   "license": "MIT",
   "scripts": {
-    "start": "env DB_URL='mongodb+srv://admin:7%24zjpJei6VX!L2K%24sApuMeZfCHxB*he1*KBYuEJ%24bDCZ8b%40Yenm@vignettecluster.o4pwf.mongodb.net/vignette-staging' node server.js",
-    "test": "env DB_URL='mongodb+srv://admin:7%24zjpJei6VX!L2K%24sApuMeZfCHxB*he1*KBYuEJ%24bDCZ8b%40Yenm@vignettecluster.o4pwf.mongodb.net/vignette-test' mocha --exit tests"
+    "start": "env DB_URL='mongodb+srv://staging:secret123@vignettecluster.o4pwf.mongodb.net/vignette-staging' node server.js",
+    "test": "env DB_URL='mongodb+srv://test:secret123@vignettecluster.o4pwf.mongodb.net/vignette-test' mocha --exit tests"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
