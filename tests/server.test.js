@@ -224,5 +224,93 @@ describe("Server", function () {
         chai.assert.equal(startScore - 1, response.body.score);
       });
     });
+
+    describe("with a previous vote", () => {
+      const hasVoted = true;
+
+      it("successfully undoes vote up", async () => {
+        const currentVote = true;
+        const previousVote = true;
+
+        const startScore = submission_1.score;
+
+        // Send request
+        const response = await chai
+          .request(this.app)
+          .patch(`${path}/${submission_1._id}`)
+          .type("form")
+          .send({
+            hasVoted: hasVoted,
+            currentVote: currentVote,
+            previousVote: previousVote
+          });
+
+        // Confirm score has been decremented
+        chai.assert.equal(startScore - 1, response.body.score);
+      });
+
+      it("successfully undoes vote down", async () => {
+        const currentVote = false;
+        const previousVote = false;
+
+        const startScore = submission_1.score;
+
+        // Send request
+        const response = await chai
+          .request(this.app)
+          .patch(`${path}/${submission_1._id}`)
+          .type("form")
+          .send({
+            hasVoted: hasVoted,
+            currentVote: currentVote,
+            previousVote: previousVote
+          });
+
+        // Confirm score has been incremented
+        chai.assert.equal(startScore + 1, response.body.score);
+      });
+
+      it("successfully replaces vote up with vote down", async () => {
+        const currentVote = false;
+        const previousVote = true;
+
+        const startScore = submission_1.score;
+
+        // Send request
+        const response = await chai
+          .request(this.app)
+          .patch(`${path}/${submission_1._id}`)
+          .type("form")
+          .send({
+            hasVoted: hasVoted,
+            currentVote: currentVote,
+            previousVote: previousVote
+          });
+
+        // Confirm score has been decremented twice
+        chai.assert.equal(startScore - 2, response.body.score);
+      });
+
+      it("successfully replaces vote down with vote up", async () => {
+        const currentVote = true;
+        const previousVote = false;
+
+        const startScore = submission_1.score;
+
+        // Send request
+        const response = await chai
+          .request(this.app)
+          .patch(`${path}/${submission_1._id}`)
+          .type("form")
+          .send({
+            hasVoted: hasVoted,
+            currentVote: currentVote,
+            previousVote: previousVote
+          });
+
+        // Confirm score has been incremented twice
+        chai.assert.equal(startScore + 2, response.body.score);
+      });
+    });
   });
 });
