@@ -6,7 +6,7 @@ async function getSubmissions() {
 }
 
 async function getSubmission(id) {
-  return await Submission.findOne({ _id: id });
+  return await Submission.findById(id)
 }
 
 async function createSubmission(data) {
@@ -28,11 +28,11 @@ async function updateSubmission(id, data) {
   let currentVote = data["currentVote"] === "true";
 
   // The value to change the submissions score by
-  let scorechange = 0;
+  let scoreChange = 0;
 
   if (!hasVoted) {
     // If haven't voted previously, add new vote
-    currentVote ? (scoreChange = 1) : (scorechange = -1);
+    currentVote ? (scoreChange = 1) : (scoreChange = -1);
   } else if (previousVote === currentVote) {
     // If voted previously and votes match, undo vote
     currentVote ? (scoreChange = -1) : (scoreChange = 1);
@@ -44,14 +44,16 @@ async function updateSubmission(id, data) {
     scoreChange = 2;
   }
 
-  // Update chosen submission by the score value determined above
-  Submission.updateOne(
-    { _id: id },
-    { $inc: { score: scoreChange } },
-    function (error) {
-      console.log(error)
-    }
-  );
+  const submission = await Submission.findById(id);
+  submission.score = submission.score + scoreChange;
+
+  let response = submission;
+
+  await submission.save((error) => {
+    response = formatErrors(error);
+  });
+
+  return response;
 }
 
 const formatErrors = (error) => {

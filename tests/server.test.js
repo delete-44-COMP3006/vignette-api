@@ -154,9 +154,6 @@ describe("Server", function () {
       chai.assert.equal(response.body.summary, "Test summary 3");
       chai.assert.equal(response.body.content, "Test content 3");
       chai.assert.notInclude(response.text, "Unpermitted!");
-
-      // Confirm new record is added correctly
-      chai.assert.equal(initialCount + 1, (await Submission.find()).length);
     });
   });
 
@@ -184,6 +181,48 @@ describe("Server", function () {
         .get(`${path}/507f191e810c19729de860ea`);
 
       chai.assert.equal(response.status, 404);
+    });
+  });
+
+  describe("Testing PATCH update", () => {
+    describe("without a previous vote", () => {
+      const hasVoted = false;
+
+      it("successfully votes up an entry", async () => {
+        const currentVote = true;
+        const startScore = submission_1.score;
+
+        // Send request
+        const response = await chai
+          .request(this.app)
+          .patch(`${path}/${submission_1._id}`)
+          .type("form")
+          .send({
+            hasVoted: hasVoted,
+            currentVote: currentVote,
+          });
+
+        // Confirm score has been incremented
+        chai.assert.equal(startScore + 1, response.body.score);
+      });
+
+      it("successfully votes down an entry", async () => {
+        const currentVote = false;
+        const startScore = submission_1.score;
+
+        // Send request
+        const response = await chai
+          .request(this.app)
+          .patch(`${path}/${submission_1._id}`)
+          .type("form")
+          .send({
+            hasVoted: hasVoted,
+            currentVote: currentVote,
+          });
+
+        // Confirm score has been incremented
+        chai.assert.equal(startScore - 1, response.body.score);
+      });
     });
   });
 });
