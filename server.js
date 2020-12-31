@@ -28,6 +28,7 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 app.get("/submissions", routes.submissionsIndex);
 app.get("/submissions/:id", routes.submissionsShow);
 app.post("/submissions", routes.submissionsCreate);
+app.patch("/submissions/:id", routes.submissionsUpdate);
 
 // Start the server
 app.listen(port, function () {
