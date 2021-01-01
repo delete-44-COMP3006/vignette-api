@@ -17,12 +17,14 @@ describe("Server", function () {
     submission_1 = new Submission({
       title: "Test title 1",
       content: "Test content 1",
+      score: 0,
     });
 
     submission_2 = new Submission({
       title: "Test title 2",
       summary: "Test summary 2",
       content: "Test content 2",
+      score: 1,
     });
 
     await submission_1.save();
@@ -34,19 +36,63 @@ describe("Server", function () {
     await Submission.deleteMany();
   });
 
-  it("successfully GETs all submissions", async () => {
-    // Make GET index request
-    const response = await chai.request(this.app).get(path);
+  describe("Testing GET index", () => {
+    it("successfully GETs all submissions", async () => {
+      // Make GET index request
+      const response = await chai.request(this.app).get(path);
 
-    chai.assert.equal(response.status, 200);
-    chai.assert.equal(response.body.length, 2);
+      chai.assert.equal(response.status, 200);
+      chai.assert.equal(response.body.length, 2);
 
-    // Confirm all submissions are retrieved
-    chai.assert.include(response.text, "Test title 1");
-    chai.assert.include(response.text, "Test content 1");
-    chai.assert.include(response.text, "Test title 2");
-    chai.assert.include(response.text, "Test summary 2");
-    chai.assert.include(response.text, "Test content 2");
+      // Confirm all submissions are retrieved
+      chai.assert.include(response.text, "Test title 1");
+      chai.assert.include(response.text, "Test content 1");
+      chai.assert.include(response.text, "Test title 2");
+      chai.assert.include(response.text, "Test summary 2");
+      chai.assert.include(response.text, "Test content 2");
+    });
+
+    it("sorts by score descending by default", async () => {
+      // Make GET index request
+      const response = await chai.request(this.app).get(path);
+
+      chai.assert.equal(response.status, 200);
+      chai.assert.equal(response.body.length, 2);
+
+      // Confirm data is retrieved sorted by score
+      chai.assert.equal(response.body[0].title, "Test title 2");
+      chai.assert.equal(response.body[0].content, "Test content 2");
+      chai.assert.equal(response.body[0].summary, "Test summary 2");
+      chai.assert.equal(response.body[0].score, "1");
+
+      chai.assert.equal(response.body[1].title, "Test title 1");
+      chai.assert.equal(response.body[1].content, "Test content 1");
+      chai.assert.equal(response.body[1].score, "0");
+    });
+
+    it("accepts other fields to sort by", async () => {
+      // Make GET index request with sort body
+      const response = await chai
+        .request(this.app)
+        .get(path)
+        .type("form")
+        .send({
+          sort: "name"
+        });
+
+      chai.assert.equal(response.status, 200);
+      chai.assert.equal(response.body.length, 2);
+
+      // Confirm data is retrieved sorted by name
+      chai.assert.equal(response.body[0].title, "Test title 1");
+      chai.assert.equal(response.body[0].content, "Test content 1");
+      chai.assert.equal(response.body[0].score, "0");
+
+      chai.assert.equal(response.body[1].title, "Test title 2");
+      chai.assert.equal(response.body[1].content, "Test content 2");
+      chai.assert.equal(response.body[1].summary, "Test summary 2");
+      chai.assert.equal(response.body[1].score, "1");
+    });
   });
 
   describe("Testing POST create", () => {
@@ -242,7 +288,7 @@ describe("Server", function () {
           .send({
             hasVoted: hasVoted,
             currentVote: currentVote,
-            previousVote: previousVote
+            previousVote: previousVote,
           });
 
         // Confirm score has been decremented
@@ -263,7 +309,7 @@ describe("Server", function () {
           .send({
             hasVoted: hasVoted,
             currentVote: currentVote,
-            previousVote: previousVote
+            previousVote: previousVote,
           });
 
         // Confirm score has been incremented
@@ -284,7 +330,7 @@ describe("Server", function () {
           .send({
             hasVoted: hasVoted,
             currentVote: currentVote,
-            previousVote: previousVote
+            previousVote: previousVote,
           });
 
         // Confirm score has been decremented twice
@@ -305,7 +351,7 @@ describe("Server", function () {
           .send({
             hasVoted: hasVoted,
             currentVote: currentVote,
-            previousVote: previousVote
+            previousVote: previousVote,
           });
 
         // Confirm score has been incremented twice
