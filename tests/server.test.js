@@ -76,7 +76,7 @@ describe("Server", function () {
         .request(this.app)
         .get(path)
         .type("form")
-        .send({
+        .query({
           sort: "name"
         });
 

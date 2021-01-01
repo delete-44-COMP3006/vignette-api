@@ -1,7 +1,7 @@
 const db = require("./db/submissions");
 
 async function submissionsIndex(request, response) {
-  const submissions = await db.getSubmissions(request.body);
+  const submissions = await db.getSubmissions(request.query);
 
   response.json(submissions);
 }
