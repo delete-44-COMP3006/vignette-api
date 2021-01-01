@@ -1,8 +1,8 @@
 const Submission = require("../models/submission");
 const permittedParams = ["title", "summary", "content"];
 
-async function getSubmissions() {
-  return await Submission.find();
+async function getSubmissions(data) {
+  return await Submission.find().sort(data["sort"] || "-score");
 }
 
 async function getSubmission(id) {
