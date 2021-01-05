@@ -22,7 +22,11 @@ describe("Submission model", function () {
     chai.assert.equal(submission.title, "Title");
     chai.assert.equal(submission.content, "Content");
     chai.assert.equal(submission.summary, "Summary");
+
+    // Confirm default fields are created
     chai.assert.isNotNull(submission._id);
+    chai.assert.isNotNull(submission.createdAt);
+    chai.assert.isNotNull(submission.updatedAt);
   });
 
   describe("Title", () => {
