@@ -10,6 +10,10 @@ describe("Server", function () {
   let submission_1, submission_2;
   const path = "/submissions";
 
+  const date1 = new Date();
+  const date2 = new Date();
+  date2.setDate(new Date().getDate() + 1)
+
   beforeEach(async () => {
     this.app = app;
 
@@ -17,6 +21,7 @@ describe("Server", function () {
     submission_1 = new Submission({
       title: "Test title 1",
       content: "Test content 1",
+      createdAt: date1,
       score: 0,
     });
 
@@ -24,6 +29,7 @@ describe("Server", function () {
       title: "Test title 2",
       summary: "Test summary 2",
       content: "Test content 2",
+      createdAt: date2,
       score: 1,
     });
 
@@ -47,9 +53,12 @@ describe("Server", function () {
       // Confirm all submissions are retrieved
       chai.assert.include(response.text, "Test title 1");
       chai.assert.include(response.text, "Test content 1");
+      chai.assert.include(response.text, date1.toISOString());
+
       chai.assert.include(response.text, "Test title 2");
       chai.assert.include(response.text, "Test summary 2");
       chai.assert.include(response.text, "Test content 2");
+      chai.assert.include(response.text, date2.toISOString());
     });
 
     it("sorts by score descending by default", async () => {
@@ -215,9 +224,12 @@ describe("Server", function () {
       // Confirm only desired submission is retrieved
       chai.assert.equal(response.body.title, "Test title 1");
       chai.assert.equal(response.body.content, "Test content 1");
+      chai.assert.include(response.body.createdAt, date1.toISOString());
+
       chai.assert.notInclude(response.text, "Test title 2");
       chai.assert.notInclude(response.text, "Test summary 2");
       chai.assert.notInclude(response.text, "Test content 2");
+      chai.assert.notInclude(response.text, date2.toISOString());
     });
 
     it("returns valid status when given an invalid ID", async () => {
