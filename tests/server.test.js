@@ -73,13 +73,15 @@ describe("Server", function () {
       chai.assert.equal(response.body[0].content, "Test content 2");
       chai.assert.equal(response.body[0].summary, "Test summary 2");
       chai.assert.equal(response.body[0].score, "1");
+      chai.assert.equal(response.body[0].createdAt, date2.toISOString());
 
       chai.assert.equal(response.body[1].title, "Test title 1");
       chai.assert.equal(response.body[1].content, "Test content 1");
       chai.assert.equal(response.body[1].score, "0");
+      chai.assert.equal(response.body[1].createdAt, date1.toISOString());
     });
 
-    it("accepts other fields to sort by", async () => {
+    it("accepts name fields to sort by", async () => {
       // Make GET index request with sort body
       const response = await chai
         .request(this.app)
@@ -96,11 +98,65 @@ describe("Server", function () {
       chai.assert.equal(response.body[0].title, "Test title 1");
       chai.assert.equal(response.body[0].content, "Test content 1");
       chai.assert.equal(response.body[0].score, "0");
+      chai.assert.equal(response.body[0].createdAt, date1.toISOString());
 
       chai.assert.equal(response.body[1].title, "Test title 2");
       chai.assert.equal(response.body[1].content, "Test content 2");
       chai.assert.equal(response.body[1].summary, "Test summary 2");
       chai.assert.equal(response.body[1].score, "1");
+      chai.assert.equal(response.body[1].createdAt, date2.toISOString());
+    });
+
+    it("accepts createdAt fields to sort by", async () => {
+      // Make GET index request with sort body
+      const response = await chai
+        .request(this.app)
+        .get(path)
+        .type("form")
+        .query({
+          sort: "createdAt"
+        });
+
+      chai.assert.equal(response.status, 200);
+      chai.assert.equal(response.body.length, 2);
+
+      // Confirm data is retrieved sorted by createdAt ascending
+      chai.assert.equal(response.body[0].title, "Test title 1");
+      chai.assert.equal(response.body[0].content, "Test content 1");
+      chai.assert.equal(response.body[0].score, "0");
+      chai.assert.equal(response.body[0].createdAt, date1.toISOString());
+
+      chai.assert.equal(response.body[1].title, "Test title 2");
+      chai.assert.equal(response.body[1].content, "Test content 2");
+      chai.assert.equal(response.body[1].summary, "Test summary 2");
+      chai.assert.equal(response.body[1].score, "1");
+      chai.assert.equal(response.body[1].createdAt, date2.toISOString());
+    });
+
+    it("accepts -createdAt fields to sort by", async () => {
+      // Make GET index request with sort body
+      const response = await chai
+        .request(this.app)
+        .get(path)
+        .type("form")
+        .query({
+          sort: "-createdAt"
+        });
+
+      chai.assert.equal(response.status, 200);
+      chai.assert.equal(response.body.length, 2);
+
+      // Confirm data is retrieved sorted by createdAt descending
+      chai.assert.equal(response.body[0].title, "Test title 2");
+      chai.assert.equal(response.body[0].content, "Test content 2");
+      chai.assert.equal(response.body[0].summary, "Test summary 2");
+      chai.assert.equal(response.body[0].score, "1");
+      chai.assert.equal(response.body[0].createdAt, date2.toISOString());
+
+      chai.assert.equal(response.body[1].title, "Test title 1");
+      chai.assert.equal(response.body[1].content, "Test content 1");
+      chai.assert.equal(response.body[1].score, "0");
+      chai.assert.equal(response.body[1].createdAt, date1.toISOString());
     });
   });
 
@@ -224,7 +280,7 @@ describe("Server", function () {
       // Confirm only desired submission is retrieved
       chai.assert.equal(response.body.title, "Test title 1");
       chai.assert.equal(response.body.content, "Test content 1");
-      chai.assert.include(response.body.createdAt, date1.toISOString());
+      chai.assert.equal(response.body.createdAt, date1.toISOString());
 
       chai.assert.notInclude(response.text, "Test title 2");
       chai.assert.notInclude(response.text, "Test summary 2");
