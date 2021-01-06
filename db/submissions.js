@@ -73,11 +73,11 @@ const formatErrors = (error) => {
 };
 
 const setAwards = (submission) => {
-  if (submission.score <= 50) {
+  if (submission.score < 50) {
     submission.award = "none";
-  } else if (submission.score <= 100) {
+  } else if (submission.score < 100) {
     submission.award = "bronze";
-  } else if (submission.score <= 150) {
+  } else if (submission.score < 150) {
     submission.award = "silver";
   } else {
     submission.award = "gold";

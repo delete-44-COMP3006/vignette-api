@@ -317,7 +317,8 @@ describe("Server", function () {
           });
 
         // Confirm score has been incremented
-        chai.assert.equal(startScore + 1, response.body.score);
+        chai.assert.equal(response.body.score, startScore + 1);
+        chai.assert.equal(response.body.award, "none")
       });
 
       it("successfully votes down an entry", async () => {
@@ -334,8 +335,9 @@ describe("Server", function () {
             currentVote: currentVote,
           });
 
-        // Confirm score has been incremented
-        chai.assert.equal(startScore - 1, response.body.score);
+        // Confirm score has been decremented
+        chai.assert.equal(response.body.score, startScore - 1);
+        chai.assert.equal(response.body.award, "none")
       });
     });
 
@@ -360,7 +362,8 @@ describe("Server", function () {
           });
 
         // Confirm score has been decremented
-        chai.assert.equal(startScore - 1, response.body.score);
+        chai.assert.equal(response.body.score, startScore - 1);
+        chai.assert.equal(response.body.award, "none")
       });
 
       it("successfully undoes vote down", async () => {
@@ -381,7 +384,8 @@ describe("Server", function () {
           });
 
         // Confirm score has been incremented
-        chai.assert.equal(startScore + 1, response.body.score);
+        chai.assert.equal(response.body.score, startScore + 1);
+        chai.assert.equal(response.body.award, "none")
       });
 
       it("successfully replaces vote up with vote down", async () => {
@@ -402,7 +406,8 @@ describe("Server", function () {
           });
 
         // Confirm score has been decremented twice
-        chai.assert.equal(startScore - 2, response.body.score);
+        chai.assert.equal(response.body.score, startScore - 2);
+        chai.assert.equal(response.body.award, "none")
       });
 
       it("successfully replaces vote down with vote up", async () => {
@@ -423,7 +428,76 @@ describe("Server", function () {
           });
 
         // Confirm score has been incremented twice
-        chai.assert.equal(startScore + 2, response.body.score);
+        chai.assert.equal(response.body.score, startScore + 2);
+        chai.assert.equal(response.body.award, "none")
+      });
+
+      it("correctly assigns a bronze award", async () => {
+        submission_1.score = 49;
+        await submission_1.save();
+
+        // Send request
+        const response = await chai
+        .request(this.app)
+        .patch(`${path}/${submission_1._id}`)
+        .type("form")
+        .send({
+          hasVoted: false,
+          currentVote: true,
+        });
+
+        chai.assert.equal(response.body.award, "bronze")
+      });
+
+      it("correctly assigns a silver award", async () => {
+        submission_1.score = 99;
+        await submission_1.save();
+
+        // Send request
+        const response = await chai
+        .request(this.app)
+        .patch(`${path}/${submission_1._id}`)
+        .type("form")
+        .send({
+          hasVoted: false,
+          currentVote: true,
+        });
+
+        chai.assert.equal(response.body.award, "silver")
+      });
+
+      it("correctly assigns a gold award", async () => {
+        submission_1.score = 149;
+        await submission_1.save();
+
+        // Send request
+        const response = await chai
+        .request(this.app)
+        .patch(`${path}/${submission_1._id}`)
+        .type("form")
+        .send({
+          hasVoted: false,
+          currentVote: true,
+        });
+
+        chai.assert.equal(response.body.award, "gold")
+      });
+
+      it("correctly removes an award", async () => {
+        submission_1.score = 50;
+        await submission_1.save();
+
+        // Send request
+        const response = await chai
+        .request(this.app)
+        .patch(`${path}/${submission_1._id}`)
+        .type("form")
+        .send({
+          hasVoted: false,
+          currentVote: false,
+        });
+
+        chai.assert.equal(response.body.award, "none")
       });
     });
   });
