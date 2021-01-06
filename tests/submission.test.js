@@ -162,7 +162,7 @@ describe("Submission model", function () {
       const submission = new Submission({
         title: "Title",
         content: "Content",
-        award: "bronze"
+        award: "bronze",
       });
 
       const error = submission.validateSync();
@@ -175,7 +175,7 @@ describe("Submission model", function () {
       const submission = new Submission({
         title: "Title",
         content: "Content",
-        award: "silver"
+        award: "silver",
       });
 
       const error = submission.validateSync();
@@ -188,7 +188,7 @@ describe("Submission model", function () {
       const submission = new Submission({
         title: "Title",
         content: "Content",
-        award: "gold"
+        award: "gold",
       });
 
       const error = submission.validateSync();
