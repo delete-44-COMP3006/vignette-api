@@ -13,7 +13,7 @@ const http = require("http").Server(app);
 const io = require("socket.io")(http, {
   cors: {
     origin: "*",
-  }
+  },
 });
 
 // Set constants for the server
@@ -45,11 +45,14 @@ app.patch("/submissions/:id", routes.submissionsUpdate);
 io.on("connection", (socket) => {
   console.log("Client connected");
 
-  setInterval(() => {socket.emit("writingHint", getHint())}, 1000)
+  // Every 30 seconds, send users writing a new submission a random hint
+  setInterval(() => {
+    socket.emit("writingHint", getHint());
+  }, 30000);
 
   socket.on("disconnect", () => {
-    console.log("Client disconnected")
-  })
+    console.log("Client disconnected");
+  });
 });
 
 // Start the server
