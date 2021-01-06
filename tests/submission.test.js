@@ -22,6 +22,7 @@ describe("Submission model", function () {
     chai.assert.equal(submission.title, "Title");
     chai.assert.equal(submission.content, "Content");
     chai.assert.equal(submission.summary, "Summary");
+    chai.assert.equal(submission.award, "none");
 
     // Confirm default fields are created
     chai.assert.isNotNull(submission._id);
@@ -126,6 +127,74 @@ describe("Submission model", function () {
 
       chai.assert.isUndefined(error);
       chai.assert.equal(submission.score, 0);
+    });
+  });
+
+  describe("Award", () => {
+    it("is assigned by default", async () => {
+      const submission = new Submission({
+        title: "Title",
+        content: "Content",
+      });
+
+      const error = submission.validateSync();
+
+      chai.assert.isUndefined(error);
+      chai.assert.equal(submission.award, "none");
+    });
+
+    it("is invalid when not one of valid enum", async () => {
+      const submission = new Submission({
+        title: "Title",
+        content: "Content",
+        award: "Invalid",
+      });
+
+      const error = submission.validateSync();
+
+      chai.assert.equal(
+        error.errors.award.message,
+        "`Invalid` is not a valid enum value for path `award`."
+      );
+    });
+
+    it("is is valid when 'bronze'", async () => {
+      const submission = new Submission({
+        title: "Title",
+        content: "Content",
+        award: "bronze"
+      });
+
+      const error = submission.validateSync();
+
+      chai.assert.isUndefined(error);
+      chai.assert.equal(submission.award, "bronze");
+    });
+
+    it("is is valid when 'silver'", async () => {
+      const submission = new Submission({
+        title: "Title",
+        content: "Content",
+        award: "silver"
+      });
+
+      const error = submission.validateSync();
+
+      chai.assert.isUndefined(error);
+      chai.assert.equal(submission.award, "silver");
+    });
+
+    it("is is valid when 'gold'", async () => {
+      const submission = new Submission({
+        title: "Title",
+        content: "Content",
+        award: "gold"
+      });
+
+      const error = submission.validateSync();
+
+      chai.assert.isUndefined(error);
+      chai.assert.equal(submission.award, "gold");
     });
   });
 });

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const awards = ["none", "bronze", "silver", "gold"]
 
 const submissionSchema = new mongoose.Schema(
   {
@@ -25,6 +26,11 @@ const submissionSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    award: {
+      type: String,
+      enum: awards,
+      default: "none"
+    }
   },
   { timestamps: true }
 );
