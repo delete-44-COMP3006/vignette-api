@@ -3,7 +3,7 @@ const app = require("express")();
 const mongoose = require("mongoose");
 const routes = require("./routes");
 
-const getHint = require("./writing-hints");
+const getHint = require("./sockets/writing-hints");
 
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -42,8 +42,11 @@ app.get("/submissions/:id", routes.submissionsShow);
 app.post("/submissions", routes.submissionsCreate);
 app.patch("/submissions/:id", routes.submissionsUpdate);
 
+var connectedUsers = 0;
+
 io.on("connection", (socket) => {
-  console.log("Client connected");
+  connectedUsers++;
+  io.sockets.emit("userCount", connectedUsers);
 
   // Every 30 seconds, send users writing a new submission a random hint
   setInterval(() => {
@@ -51,8 +54,9 @@ io.on("connection", (socket) => {
   }, 30000);
 
   socket.on("disconnect", () => {
-    console.log("Client disconnected");
-  });
+    connectedUsers--;
+    io.sockets.emit("userCount", connectedUsers);
+  })
 });
 
 // Start the server
