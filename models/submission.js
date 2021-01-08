@@ -35,5 +35,7 @@ const submissionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+submissionSchema.index({ createdAt: 1 }, { expireAfterSeconds: 2592000 });
+
 const Submission = mongoose.model("submission", submissionSchema);
 module.exports = Submission;
